@@ -1,0 +1,83 @@
+#include <FastLED.h>
+#include <IRremote.h>
+int RECV_PIN = 11;
+decode_results results;
+boolean poweredOn = false;
+#define NUM_LEDS 60
+#define DATA_PIN 52
+
+
+const int LIGHT_SENSOR_PIN = A5;
+const int ANALOG_THRESHOLD = 500;
+int analogValue;
+
+
+CRGB leds[NUM_LEDS];
+
+void setup () {
+  FastLED.addLeds<WS2811, DATA_PIN, GRB>(leds, NUM_LEDS);
+  Serial.begin(57600);
+
+  unsigned char i;
+  for(i=1 ; i<=7; i++)
+  pinMode(i,OUTPUT);
+  senseFlash();
+  allOn();
+  irrecv.enableIRIn();
+  pinMode(RECV_PIN, INPUT);
+ 
+}
+void loop ()
+{
+analogValue = analogRead(A5);
+Serial.println("Analog value : ");
+  Serial.println(analogRead(A5));
+if(analogValue < ANALOG_THRESHOLD)
+ FastLED.setBrightness(0);
+else
+ FastLED.setBrightness(50);
+
+
+if (irrecv.decode(&results)) {
+long int decCode = results.value;
+Serial.println(decCode);
+  
+ switch (results.value) {
+
+case 16753245:
+senseFlash();
+  if (poweredOn = True)
+  allOff();
+  poweredOn = false;
+   if(poweredON = false)
+   allOn();
+   poweredOn = true:
+case 16724175:
+senseFlash();
+  allOff();
+   poweredOn = true:
+ }}
+
+
+  uint16_t sinBeat = beatsin16(80, 0, NUM_LEDS - 1, 0, 0);
+  leds[sinBeat] = CRGB::Red;
+  uint16_t sinBeat2 = beatsin16(80, 0, NUM_LEDS - 1, 0, 85);
+  leds[sinBeat2] = CRGB::Green;
+  uint16_t sinBeat3 = beatsin16(80, 0, NUM_LEDS - 1, 0, 170);
+  leds[sinBeat3] = CRGB::White;
+  uint16_t sinBeat4 = beatsin16(80, 0, NUM_LEDS - 1, 0, 255);
+  leds[sinBeat4] = CRGB::Red;
+  uint16_t sinBeat5 = beatsin16(80, 0, NUM_LEDS - 1, 0, 340);
+  leds[sinBeat5] = CRGB::Green;
+  uint16_t sinBeat6 = beatsin16(80, 0, NUM_LEDS - 1, 0, 425);
+  leds[sinBeat6] = CRGB::White;
+
+Serial.print(analogRead(A5));
+fadeToBlackBy(leds, NUM_LEDS, 10);
+
+ EVERY_N_MILLISECONDS(10){
+   Serial.println(sinBeat);
+ }
+
+  FastLED.show ();
+}
